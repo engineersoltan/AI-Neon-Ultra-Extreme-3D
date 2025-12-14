@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Neon Ultra Extreme 3D</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family: Arial, sans-serif;
+  background:#05050a;
+  color:#eee;
+  perspective:2200px;
+  overflow-x:hidden;
+  transition:background 1s;
+  position:relative;
+  min-height:100vh;
+}
+
+/* PARTICLES BACKGROUND */
+#particles{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+  overflow:hidden;
+}
+
+/* HEADER */
+header{
+  padding:36px 16px;
+  text-align:center;
+  background:linear-gradient(135deg,#0a0a1f,#05050a);
+  box-shadow:0 15px 70px rgba(0,0,0,.95);
+}
+header h1{
+  color:#7df;
+  font-size:34px;
+  text-shadow:0 0 30px #39f;
+}
+header p{color:#9bb}
+
+/* START OVERLAY */
+#startOverlay{
+  position:fixed;
+  inset:0;
+  background:#05050a;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+}
+#startOverlay h2{
+  color:#7df;
+  margin-bottom:30px;
+  text-shadow:0 0 25px #7df;
+}
+#startBtn{
+  padding:22px 42px;
+  font-size:18px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#7df,#39f);
+  color:#001;
+  box-shadow:0 0 60px #39f;
+  transition:.3s;
+}
+#startBtn:hover{
+  transform:scale(1.12);
+  box-shadow:0 0 80px #39f,0 0 120px #7df;
+}
+
+/* CONTAINER */
+.container{
+  padding:50px 20px;
+}
+
+/* SECTION */
+.section{
+  max-width:580px;
+  margin:0 auto 80px;
+  perspective:2000px;
+}
+
+/* CARD 3D */
+.card{
+  background:#0c0c18;
+  border-radius:34px;
+  padding:38px;
+  box-shadow:
+    0 50px 100px rgba(0,0,0,.95),
+    inset 0 0 40px rgba(60,120,255,.12);
+  transform-style:preserve-3d;
+  transition:.5s;
+  animation:rotateCard 12s linear infinite, floatCard 4s ease-in-out infinite;
+}
+.card:hover{
+  transform:rotateY(40deg) rotateX(25deg) translateZ(50px) scale(1.12);
+}
+.card h2{
+  color:#7df;
+  margin-bottom:18px;
+  text-shadow:0 0 20px #39f;
+}
+.card p{
+  color:#ccc;
+  margin-bottom:24px;
+}
+
+/* CARD ROTATION */
+@keyframes rotateCard{
+  0%{transform:rotateY(0deg)}
+  25%{transform:rotateY(25deg)}
+  50%{transform:rotateY(40deg)}
+  75%{transform:rotateY(25deg)}
+  100%{transform:rotateY(0deg)}
+}
+@keyframes floatCard{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-22px)}
+}
+
+/* BUTTONS */
+.btn{
+  width:100%;
+  padding:20px;
+  margin-bottom:20px;
+  border:none;
+  border-radius:22px;
+  font-size:18px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#7df,#39f);
+  color:#001;
+  transition:.3s;
+  position:relative;
+  z-index:2;
+}
+.btn:hover{
+  transform:scale(1.15) rotateZ(5deg);
+  box-shadow:0 0 70px #39f,0 0 120px #7df;
+}
+.btn-outline{
+  background:#0a0a14;
+  color:#7df;
+  border:2px solid #39f;
+}
+
+/* MOVING BUTTON */
+#moveBtn{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:999;
+}
+
+/* HIDDEN TEXT */
+.hidden{
+  display:none;
+  text-align:center;
+  color:#9f9;
+  margin-top:16px;
+  text-shadow:0 0 20px #0f0;
+}
+
+/* HACK EFFECT */
+#hackMessage{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  color:#0f0;
+  font-family:monospace;
+  font-size:18px;
+  padding:10px;
+  overflow:hidden;
+  z-index:9998;
+}
+#hackMessage span{
+  display:block;
+  line-height:1.2em;
+}
+
+/* SECOND PAGE / DASHBOARD */
+#secondPage{
+  display:none;
+  max-width:580px;
+  margin:60px auto;
+  padding:40px;
+  background:#0b0b1a;
+  border-radius:34px;
+  box-shadow:0 50px 100px rgba(0,0,0,.95);
+}
+#secondPage h2{
+  color:#7df;
+  margin-bottom:18px;
+  text-shadow:0 0 18px #39f;
+}
+#secondPage p{color:#ccc;margin-bottom:20px}
+
+/* NEON DASHBOARD ELEMENTS */
+.dashboard{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.dashboard .indicator{
+  background:#0a0a14;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 0 30px #39f, inset 0 0 20px #7df;
+  color:#7df;
+  text-align:center;
+  font-weight:bold;
+  animation:glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow{
+  0%{box-shadow:0 0 25px #39f, inset 0 0 15px #7df}
+  100%{box-shadow:0 0 60px #7df, inset 0 0 35px #39f}
+}
+</style>
+</head>
+
+<body>
+
+<!-- PARTICLES BACKGROUND -->
+<canvas id="particles"></canvas>
+
+<!-- START OVERLAY -->
+<div id="startOverlay">
+  <h2>اضغط للبدء</h2>
+  <button id="startBtn">تشغيل الموقع</button>
+</div>
+
+<header>
+  <h1>AI Neon Ultra Extreme 3D</h1>
+  <p>Interactive Game Ultra Experience</p>
+</header>
+
+<div class="container">
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="card float">
+      <h2>زر ذكي</h2>
+      <p>الزر يتغير حسب التفاعل</p>
+      <button class="btn" onclick="changeText(this)">تفاعل</button>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="card">
+      <h2>عنصر مخفي</h2>
+      <p>يظهر ويختفي بالضغط</p>
+      <button class="btn-outline" onclick="toggleHidden()">إظهار / إخفاء</button>
+      <div id="hiddenBox" class="hidden">AI Interaction Detected 👀</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="card float">
+      <h2>زر متحرك صعب الإمساك</h2>
+      <p>حاول تمسكني فوق أي شيء</p>
+      <button class="btn" id="moveBtn">حاول تمسكني</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="card">
+      <h2>زر تم التهكير</h2>
+      <p>يظهر أرقام وحروف عمودية باللون الأخضر</p>
+      <button class="btn-outline" id="hackBtn">تم التهكير</button>
+    </div>
+  </div>
+
+  <!-- SECTION 5 SECOND PAGE / DASHBOARD -->
+  <div id="secondPage">
+    <h2>Dashboard تفاعلي</h2>
+    <div class="dashboard">
+      <div class="indicator" id="cpu">CPU Usage: 0%</div>
+      <div class="indicator" id="memory">Memory: 0%</div>
+      <div class="indicator" id="network">Network: Connected</div>
+      <div class="indicator" id="ai">AI Status: Online</div>
+    </div>
+    <button class="btn-outline" onclick="backToMain()">عودة للواجهة الرئيسية</button>
+  </div>
+
+</div>
+
+<!-- HACK MESSAGE -->
+<div id="hackMessage"></div>
+
+<script>
+let activated=false;
+
+/* أصوات */
+const clickSound=new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+const hackSound=new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3");
+
+/* ===== START SITE ===== */
+document.getElementById("startBtn").onclick=()=>{
+  activated=true;
+  document.getElementById("startOverlay").style.display="none";
+  clickSound.play();
+};
+
+/* ===== CHANGE TEXT ===== */
+function changeText(btn){
+  if(!activated) return;
+  clickSound.play();
+  const arr=["AI Ready","Processing","Done ✔","Try Again"];
+  btn.textContent=arr[Math.floor(Math.random()*arr.length)];
+}
+
+/* ===== TOGGLE HIDDEN ===== */
+function toggleHidden(){
+  if(!activated) return;
+  clickSound.play();
+  const box=document.getElementById("hiddenBox");
+  box.style.display=box.style.display==="block"?"none":"block";
+}
+
+/* ===== MOVING BUTTON ===== */
+const moveBtn=document.getElementById("moveBtn");
+function moveBtnFunc(){
+  if(!activated) return;
+  const maxX=window.innerWidth-150;
+  const maxY=100; // الجزء العلوي فقط
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
+  moveBtn.style.left=x+'px';
+  moveBtn.style.top=y+'px';
+}
+moveBtn.addEventListener("mouseenter",moveBtnFunc);
+moveBtn.addEventListener("touchstart",moveBtnFunc);
+
+/* ===== RANDOM NEON GLOW ===== */
+function randomGlow(){
+  if(!activated) return;
+  const colors=["#0a0a1f","#05050a","#1a0a2a","#0a1a2a","#1a0a3a"];
+  document.body.style.background = colors[Math.floor(Math.random()*colors.length)];
+}
+
+/* ===== SECOND PAGE / DASHBOARD ===== */
+function backToMain(){
+  document.getElementById("secondPage").style.display="none";
+  document.querySelectorAll(".section").forEach(s=>s.style.display="block");
+}
+function goToSecondPage(){
+  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+  document.getElementById("secondPage").style.display="block";
+}
+
+/* ===== DYNAMIC DASHBOARD FAKE DATA ===== */
+function updateDashboard(){
+  if(!activated) return;
+  document.getElementById("cpu").textContent=`CPU Usage: ${Math.floor(Math.random()*100)}%`;
+  document.getElementById("memory").textContent=`Memory: ${Math.floor(Math.random()*100)}%`;
+}
+setInterval(updateDashboard,2000);
+
+/* ===== PARTICLES BACKGROUND ===== */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+let w,h;
+function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
+window.addEventListener("resize",resize);
+resize();
+
+const particles=[];
+for(let i=0;i<150;i++){
+  particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,speed:Math.random()*0.5+0.2});
+}
+
+let mouse={x:null,y:null};
+window.addEventListener("mousemove",(e)=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+window.addEventListener("touchmove",(e)=>{mouse.x=e.touches[0].clientX;mouse.y=e.touches[0].clientY;});
+
+function animateParticles(){
+  ctx.clearRect(0,0,w,h);
+  particles.forEach(p=>{
+    if(mouse.x!=null && mouse.y!=null){
+      const dx=p.x-mouse.x;
+      const dy=p.y-mouse.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        p.x+=dx*0.03;
+        p.y+=dy*0.03;
+      }
+    }
+    p.y-=p.speed;
+    if(p.y<0)p.y=h;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="#39f";
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+/* ===== HACK BUTTON EFFECT ===== */
+const hackBtn=document.getElementById("hackBtn");
+const hackMessage=document.getElementById("hackMessage");
+hackBtn.onclick=()=>{
+  if(!activated) return;
+  hackSound.play();
+  hackMessage.innerHTML="";
+  hackMessage.style.display="block";
+  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const lines=50;
+  const interval=setInterval(()=>{
+    hackMessage.innerHTML="";
+    for(let i=0;i<lines;i++){
+      let str="";
+      for(let j=0;j<20;j++){
+        str+=chars.charAt(Math.floor(Math.random()*chars.length))+" ";
+      }
+      hackMessage.innerHTML+="<span>"+str+"</span>";
+    }
+  },150);
+  setTimeout(()=>{
+    clearInterval(interval);
+    hackMessage.style.display="none";
+  },3000);
+};
+</script>
+
+</body>
+</html>
